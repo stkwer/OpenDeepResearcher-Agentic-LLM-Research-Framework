@@ -1,0 +1,18 @@
+# Core Research Pipeline
+langchain>=0.2
+langgraph>=0.1
+tavily-python>=0.3
+openai>=1.0
+
+# Backend API
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.0.0
+
+# Utilities
+python-dotenv>=1.0
+requests>=2.31
+python-dateutil>=2.8.2
+
+# Optional but recommended
+pyyaml>=6.0
