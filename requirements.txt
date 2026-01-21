@@ -1,0 +1,11 @@
+openai
+fastapi
+uvicorn
+pydantic
+httpx
+python-dotenv
+tavily-python
+streamlit
+requests
+langgraph
+reportlab
