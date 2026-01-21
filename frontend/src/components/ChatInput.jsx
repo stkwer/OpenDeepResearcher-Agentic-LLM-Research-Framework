@@ -133,7 +133,7 @@ const ChatInput = ({ onSend, disabled }) => {
                                             initial={{ opacity: 0, y: -10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: -10 }}
-                                            className="absolute bottom-full left-0 mb-2 bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden z-10 min-w-[180px]"
+                                            className="absolute bottom-full left-0 mb-2 bg-slate-900 border border-slate-700 rounded-lg shadow-lg overflow-hidden z-10 min-w-[180px]"
                                         >
                                             <button
                                                 type="button"
@@ -141,7 +141,7 @@ const ChatInput = ({ onSend, disabled }) => {
                                                     setMode('normal');
                                                     setShowModeMenu(false);
                                                 }}
-                                                className={`w-full px-4 py-2.5 text-left text-sm hover:bg-slate-50 transition-colors ${mode === 'normal' ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-700'
+                                                className={`w-full px-4 py-2.5 text-left text-sm hover:bg-slate-800 transition-colors ${mode === 'normal' ? 'bg-teal-900/50 text-teal-300 font-medium' : 'text-slate-300'
                                                     }`}
                                             >
                                                 <div className="flex items-center space-x-2">
@@ -150,7 +150,7 @@ const ChatInput = ({ onSend, disabled }) => {
                                                     </svg>
                                                     <div>
                                                         <div className="font-medium">Normal</div>
-                                                        <div className="text-xs text-slate-500">Fast responses</div>
+                                                        <div className="text-xs text-slate-400">Fast responses</div>
                                                     </div>
                                                 </div>
                                             </button>
@@ -160,7 +160,7 @@ const ChatInput = ({ onSend, disabled }) => {
                                                     setMode('deepthink');
                                                     setShowModeMenu(false);
                                                 }}
-                                                className={`w-full px-4 py-2.5 text-left text-sm hover:bg-slate-50 transition-colors ${mode === 'deepthink' ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-700'
+                                                className={`w-full px-4 py-2.5 text-left text-sm hover:bg-slate-800 transition-colors ${mode === 'deepthink' ? 'bg-teal-900/50 text-teal-300 font-medium' : 'text-slate-300'
                                                     }`}
                                             >
                                                 <div className="flex items-center space-x-2">
@@ -169,7 +169,7 @@ const ChatInput = ({ onSend, disabled }) => {
                                                     </svg>
                                                     <div>
                                                         <div className="font-medium">DeepThink</div>
-                                                        <div className="text-xs text-slate-500">Detailed analysis</div>
+                                                        <div className="text-xs text-slate-400">Detailed analysis</div>
                                                     </div>
                                                 </div>
                                             </button>

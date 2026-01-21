@@ -50,3 +50,24 @@ class ConversationUpdate(BaseModel):
     """Request model for updating a conversation"""
     title: Optional[str] = None
 
+
+class ResearchPlanRequest(BaseModel):
+    """Request model for generating a research plan"""
+    message: str = Field(..., min_length=1, description="User's research query")
+    session_id: str = Field(..., description="Unique session identifier")
+
+
+class ResearchPlanResponse(BaseModel):
+    """Response model for research plan"""
+    plan_title: str = Field(..., description="Title of the research plan")
+    sub_questions: List[str] = Field(..., description="List of research sub-questions")
+    session_id: str = Field(..., description="Session identifier")
+    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+
+
+class ResearchExecuteRequest(BaseModel):
+    """Request model for executing a research plan"""
+    message: str = Field(..., description="Original research query")
+    sub_questions: List[str] = Field(..., description="Approved research sub-questions")
+    session_id: str = Field(..., description="Unique session identifier")
+

@@ -14,7 +14,8 @@ import logging
 
 from models import (
     ResearchRequest, ResearchResponse, ErrorResponse,
-    Conversation, ConversationCreate, ConversationUpdate, Message
+    Conversation, ConversationCreate, ConversationUpdate, Message,
+    ResearchPlanRequest, ResearchPlanResponse, ResearchExecuteRequest
 )
 from memory import session_memory
 from database import db
@@ -156,6 +157,151 @@ async def research(request: ResearchRequest):
         )
 
 
+@app.post("/generate-plan", response_model=ResearchPlanResponse)
+async def generate_plan(request: ResearchPlanRequest):
+    """
+    Generate a research plan without executing the full research
+    
+    Returns a plan with sub-questions that can be reviewed before execution.
+    """
+    try:
+        # Validate research graph is initialized
+        if research_graph is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Research graph not initialized. Check API keys and configuration."
+            )
+        
+        # Get or create conversation from database
+        conversation = db.get_conversation_by_session(request.session_id)
+        conversation_id = None
+        
+        if conversation:
+            conversation_id = conversation["id"]
+        
+        # Validate or create session (for backward compatibility)
+        if not session_memory.validate_session(request.session_id):
+            session_memory.create_session(request.session_id)
+            logger.info(f"Created new session: {request.session_id}")
+        
+        # Get conversation context from database if available
+        context = ""
+        if conversation_id:
+            messages = db.get_messages(conversation_id, limit=6)
+            if messages:
+                context_parts = []
+                for msg in messages[-6:]:
+                    role = msg["role"].upper()
+                    content = msg["content"]
+                    context_parts.append(f"{role}: {content}")
+                context = "\n\n".join(context_parts)
+        
+        # Prepare topic with context if available
+        topic = request.message
+        if context:
+            topic = f"Previous context:\n{context}\n\nNew query: {request.message}"
+            logger.info(f"Using context for session {request.session_id}")
+        
+        # Run only the planner to generate sub-questions
+        logger.info(f"Generating research plan for: {request.message[:50]}...")
+        from agents.planner import PlannerAgent
+        planner = PlannerAgent()
+        sub_questions = planner.run(topic)
+        
+        logger.info(f"Generated plan with {len(sub_questions)} sub-questions")
+        
+        return ResearchPlanResponse(
+            plan_title=request.message,
+            sub_questions=sub_questions,
+            session_id=request.session_id
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating research plan: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal server error: {str(e)}"
+        )
+
+
+@app.post("/execute-plan", response_model=ResearchResponse)
+async def execute_plan(request: ResearchExecuteRequest):
+    """
+    Execute an approved research plan
+    
+    Accepts approved sub-questions and executes the search and writing phases.
+    """
+    try:
+        # Validate research graph is initialized
+        if research_graph is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Research graph not initialized. Check API keys and configuration."
+            )
+        
+        # Get or create conversation from database
+        conversation = db.get_conversation_by_session(request.session_id)
+        conversation_id = None
+        
+        if conversation:
+            conversation_id = conversation["id"]
+        
+        # Validate or create session
+        if not session_memory.validate_session(request.session_id):
+            session_memory.create_session(request.session_id)
+            logger.info(f"Created new session: {request.session_id}")
+        
+        # Store user message in memory
+        session_memory.add_message(request.session_id, "user", request.message)
+        
+        # Store user message in database if conversation exists
+        if conversation_id:
+            db.add_message(conversation_id, "user", request.message)
+        
+        # Execute research with approved plan
+        logger.info(f"Executing research plan with {len(request.sub_questions)} sub-questions")
+        
+        # Import agents
+        from agents.searcher import SearcherAgent
+        from agents.writer import WriterAgent
+        
+        searcher = SearcherAgent()
+        writer = WriterAgent()
+        
+        # Execute searcher node
+        search_results = []
+        for question in request.sub_questions:
+            results = searcher.run(question)
+            search_results.extend(results)
+        
+        logger.info(f"Collected {len(search_results)} search results")
+        
+        # Execute writer node
+        research_report = writer.run(search_results)
+        
+        
+        # Note: The frontend handles saving the research result message
+        # with proper formatting (role: 'research_result', title, summary)
+        
+        logger.info(f"Research execution completed for session {request.session_id}")
+        
+        return ResearchResponse(
+            response=research_report,
+            session_id=request.session_id
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error executing research plan: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal server error: {str(e)}"
+        )
+
+
 @app.post("/session/clear")
 async def clear_session(session_id: str):
     """Clear conversation history for a session"""
@@ -251,6 +397,27 @@ async def delete_conversation(conversation_id: str):
         return {"message": "Conversation deleted successfully"}
     except Exception as e:
         logger.error(f"Error deleting conversation: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/conversations/{conversation_id}/messages")
+async def save_message(conversation_id: str, message: Message):
+    """Save a message to a conversation (supports all message types including plan and research_result)"""
+    try:
+        # Check if conversation exists
+        conversation = db.get_conversation(conversation_id)
+        if not conversation:
+            raise HTTPException(status_code=404, detail="Conversation not found")
+        
+        # Save the message
+        db.add_message(conversation_id, message.role, message.content)
+        logger.info(f"Saved {message.role} message to conversation: {conversation_id}")
+        
+        return {"message": "Message saved successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error saving message: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

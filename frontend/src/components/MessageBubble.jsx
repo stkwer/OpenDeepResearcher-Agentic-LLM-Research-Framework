@@ -58,7 +58,7 @@ const MessageBubble = ({ message, isUser }) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-6`}
+            className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-8`}
         >
             <div className={`message-bubble ${isUser ? 'message-user' : 'message-assistant'} relative group`}>
                 {!isUser && (
