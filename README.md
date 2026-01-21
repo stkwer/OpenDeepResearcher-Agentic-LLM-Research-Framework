@@ -21,4 +21,4 @@ An agentic LLM-based research paper generation system using:
 
 ## How to Run
 $Env:TAVILY_API_KEY="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"
-streamlit run ui.py
+python -m streamlit run ui.py
