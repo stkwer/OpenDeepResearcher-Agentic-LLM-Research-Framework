@@ -87,8 +87,7 @@ const ChatInput = ({ onSend, disabled }) => {
         <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="bg-transparent px-6 py-4 sticky bottom-0"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', backdropFilter: 'blur(10px)' }}
+            className="px-6 py-4 sticky bottom-0 z-20"
         >
             <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
                 <div
@@ -96,7 +95,7 @@ const ChatInput = ({ onSend, disabled }) => {
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
-                    <div className="flex items-end space-x-2 bg-slate-950 rounded-2xl border border-slate-800 p-3 relative z-10 shadow-2xl">
+                    <div className="flex items-end space-x-2 glass rounded-2xl p-3 relative z-10 shadow-2xl backdrop-blur-xl">
                         {/* Left side buttons */}
                         <div className="flex items-center space-x-1 pb-2">
                             {/* Add button */}

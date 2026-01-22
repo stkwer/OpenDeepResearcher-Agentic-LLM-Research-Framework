@@ -11,6 +11,7 @@ import ShinyText from './components/ShinyText';
 import ResearchPlan from './components/ResearchPlan';
 import ResearchCard from './components/ResearchCard';
 import ResearchSidePanel from './components/ResearchSidePanel';
+import FloatingLines from './components/FloatingLines';
 import { motion, AnimatePresence } from 'framer-motion';
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -540,7 +541,19 @@ function App() {
     };
 
     return (
-        <div className="flex h-screen bg-slate-950">
+        <div className="flex h-screen bg-slate-950 relative overflow-hidden">
+            {/* Floating Lines Background */}
+            <FloatingLines
+                linesGradient={["#E945F5", "#2F4BC0", "#E945F5"]}
+                animationSpeed={1}
+                interactive
+                bendRadius={5}
+                bendStrength={-0.5}
+                mouseDamping={0.05}
+                parallax
+                parallaxStrength={0.2}
+            />
+
             {/* Sidebar */}
             <Sidebar
                 conversations={conversations}
@@ -555,7 +568,7 @@ function App() {
             />
 
             {/* Main Content - Split View */}
-            <div className="flex-1 flex flex-row h-screen overflow-hidden">
+            <div className="flex-1 flex flex-row h-screen overflow-hidden relative z-10">
                 {/* Conversation Area */}
                 <motion.div
                     className="flex flex-col h-full"

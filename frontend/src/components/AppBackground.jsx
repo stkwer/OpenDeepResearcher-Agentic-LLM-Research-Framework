@@ -8,6 +8,10 @@ export default function AppBackground({ children }) {
             lineWidth={1}
             lineCount={25}
             speed={0.4}
+            interactive={true}
+            bendRadius={5.00}
+            bendStrength={-0.5}
+            mouseDamping={0.05}
         >
             {children}
         </FloatingLines>
