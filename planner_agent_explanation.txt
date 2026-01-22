@@ -1,0 +1,10 @@
+Planner Agent is responsible for analyzing the user-provided
+research topic and breaking it into structured sub-questions.
+
+It creates a clear research roadmap by defining objectives,
+sub-questions, and execution steps. This helps guide the
+information retrieval and synthesis process in later stages.
+
+In Milestone 1, the Planner Agent takes a topic as input and
+outputs a well-organized research plan that can be used by
+Searcher and Writer agents.
