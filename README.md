@@ -63,7 +63,7 @@ This modular design makes the system extensible and easy to maintain.
 ## ▶️ How to Run
 
 1. Start **LM Studio** and load a compatible instruction-tuned model  
-2. Enable the local API server (default: `http://127.0.0.1:1234`)  
+2. Enable the local API server   
 3. Install required dependencies:
    ```
    pip install streamlit fpdf python-docx requests
@@ -72,14 +72,6 @@ This modular design makes the system extensible and easy to maintain.
    ```
    streamlit run agents/app.py
    ```
-
----
-
-## 📌 Notes
-
-- This branch is intended for **individual evaluation**
-- The `main` branch is maintained by the repository owner
-- All implementation and documentation in this branch reflect my contribution
 
 ---
 
