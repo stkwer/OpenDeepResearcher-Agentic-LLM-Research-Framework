@@ -1,0 +1,20 @@
+# Python environment
+.venv/
+env/
+venv/
+ENV/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Sensitive data
+.env
+
+# Local research history/database
+chats/
+
+# Operating system files
+.DS_Store
+Thumbs.db
