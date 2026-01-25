@@ -1,0 +1,80 @@
+import streamlit as st
+import os
+from dotenv import load_dotenv
+
+# 1. Load Environment Variables
+load_dotenv()
+
+# 2. Import your Agents
+from planner_agent import PlannerAgent
+from searcher_agent import SearcherAgent
+from writer_agent import WriterAgent
+
+# --- PAGE CONFIG ---
+st.set_page_config(page_title="Agentic Research Studio", page_icon="🧠", layout="wide")
+
+# --- CUSTOM CSS FOR BETTER UI ---
+st.markdown("""
+    <style>
+    .main { background-color: #f8f9fa; }
+    .stButton>button { width: 100%; border-radius: 20px; background-color: #4CAF50; color: white; }
+    .report-box { background-color: #ffffff; padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- HEADER ---
+st.title("🧠 Agentic AI Research Studio")
+st.markdown("Enter a topic and watch the **Planner**, **Searcher**, and **Writer** agents work together.")
+
+# --- INPUT SECTION ---
+with st.container():
+    topic = st.text_input("🔍 Research Topic", placeholder="e.g. Future of Quantum Computing in 2026")
+    run_button = st.button("🚀 Start Research Pipeline")
+
+# --- EXECUTION PIPELINE ---
+if run_button:
+    if not topic:
+        st.warning("Please enter a topic first!")
+    else:
+        # Initialize Agents
+        planner = PlannerAgent()
+        searcher = SearcherAgent()
+        writer = WriterAgent()
+
+        # --- STEP 1: PLANNER PROCESS ---
+        with st.status("📅 **Planner Agent** is analyzing the topic...", expanded=True) as status:
+            st.write("Generating research questions...")
+            questions = planner.run(topic)
+            st.write("### Research Questions:")
+            for q in questions:
+                st.write(f"- {q}")
+            status.update(label="Planning Complete!", state="complete", expanded=False)
+
+        # --- STEP 2: SEARCHER PROCESS ---
+        with st.status("🔍 **Searcher Agent** is browsing the web...", expanded=True) as status:
+            st.write("Searching Tavily for factual data...")
+            research_data = searcher.run(questions)
+            st.write("Data successfully retrieved.")
+            status.update(label="Search Complete!", state="complete", expanded=False)
+
+        # --- STEP 3: WRITER PROCESS (The Great UI Output) ---
+        st.divider()
+        st.subheader("✍️ Final Research Report")
+        
+        with st.spinner("Writer Agent is synthesizing the report..."):
+            final_report = writer.run(topic, research_data)
+            
+            # Displaying the report in a clean card-like container
+            st.markdown('<div class="report-box">', unsafe_allow_html=True)
+            st.markdown(final_report)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Add a download button for the user
+            st.download_button(
+                label="📥 Download Report as Markdown",
+                data=final_report,
+                file_name=f"{topic.replace(' ', '_')}_report.md",
+                mime="text/markdown"
+            )
+
+        st.balloons()
