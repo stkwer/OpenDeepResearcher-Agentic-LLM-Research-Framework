@@ -1,13 +1,3 @@
-# from langchain_openai import ChatOpenAI
-# from langchain_core.messages import HumanMessage
-
-# llm = ChatOpenAI(
-#     openai_api_key="lm-studio",
-#     base_url="http://127.0.0.1:1234/v1"
-# )
-
-# response = llm.invoke([HumanMessage(content="Is LM Studio working?")])
-# print(response.content)
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 
@@ -24,3 +14,4 @@ messages = [
 
 response = llm.generate([messages])
 print(response.generations[0][0].text)
+
