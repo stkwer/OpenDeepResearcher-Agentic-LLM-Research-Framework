@@ -1,0 +1,7 @@
+streamlit==1.28.1
+langchain-openai==0.0.2
+langchain-core==0.1.12
+tavily-python==0.3.3
+python-dotenv==1.0.0
+requests==2.31.0
+reportlab==4.0.7
