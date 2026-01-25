@@ -14,9 +14,12 @@ The system uses three specialized AI agents working in sequence:
 
 - **Automated Research Pipeline**: End-to-end research automation
 - **Multi-Agent System**: Specialized agents for planning, searching, and writing
-- **Web Interface**: Clean Streamlit UI with search history
+- **Enhanced Web Interface**: Clean Streamlit UI with blue styling and search history
+- **PDF Export**: Professional PDF reports with references and metadata
 - **Local LLM Support**: Works with LM Studio for privacy
-- **Structured Output**: Professional research reports with clear sections
+- **Structured Output**: Professional research reports with bold headings and references
+- **Search Integration**: Tavily API for real-time web search
+- **Reference Management**: Automatic URL collection and citation
 
 ## 📋 Prerequisites
 
@@ -31,14 +34,22 @@ The system uses three specialized AI agents working in sequence:
    ```bash
    pip install -r requirements.txt
    ```
+   
+   **Required packages:**
+   ```
+   streamlit==1.28.1
+   langchain-openai==0.0.2
+   langchain-core==0.1.12
+   tavily-python==0.3.3
+   python-dotenv==1.0.0
+   requests==2.31.0
+   reportlab==4.0.7
+   ```
 
 3. Set up your `.env` file:
    ```
    TAVILY_API_KEY=your_tavily_api_key_here
-   ```git remote remove origin
-git remote add origin git@github.com:SRIKRISHNAPRIYAS/OpenDeepResearcher-Agentic-LLM-Research-Framework.git
-git remote -v
-
+   ```
 
 4. Start LM Studio with a model (recommended: qwen2.5-7b-instruct)
 
@@ -75,15 +86,17 @@ python main.py
 
 ```
 PROJECT/
-├── app.py              # Streamlit web interface
+├── app.py              # Streamlit web interface with enhanced UI
+├── utils.py            # PDF generation and utility functions
 ├── main.py             # Command line interface
 ├── graph/
 │   └── research_graph.py  # Main research pipeline
 ├── planner.py          # Planner agent
-├── search.py           # Search agent  
+├── search.py           # Search agent with Tavily integration
 ├── writer.py           # Writer agent
 ├── test_llm.py         # LLM connection test
 ├── .env                # Environment variables
+├── .env.example        # Environment template
 └── requirements.txt    # Dependencies
 ```
 
