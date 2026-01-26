@@ -1,6 +1,6 @@
 import streamlit as st
 from graph.research_graph import run_research
-from utils import sanitize_filename
+from utils import sanitize_filename, generate_pdf_report
 
 # ---------------- Page Config ----------------
 st.set_page_config(
@@ -269,10 +269,12 @@ if st.session_state.selected_index is not None:
             unsafe_allow_html=True
         )
 
+        pdf_data = generate_pdf_report(item['topic'], item["final_report"], [], item.get("sub_questions", []))
         st.download_button(
             "💾 Download Report",
-            data=item["final_report"],
-            file_name=f"{sanitize_filename(item['topic'])}_report.txt",
+            data=pdf_data,
+            file_name=f"{sanitize_filename(item['topic'])}_report.pdf",
+            mime="application/pdf",
             use_container_width=True
         )
 
