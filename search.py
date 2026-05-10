@@ -7,7 +7,7 @@ load_dotenv()
 
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 if not TAVILY_API_KEY:
-    raise ValueError("TAVILY_API_KEY not found in .env file.")
+    raise ValueError("TAVILY_API_KEY not found.")
 
 tavily = TavilyClient(api_key=TAVILY_API_KEY)
 
