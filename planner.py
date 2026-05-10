@@ -2,7 +2,9 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from typing import List
 from langchain_groq import ChatGroq
+from dotenv import load_dotenv
 import os
+load_dotenv()
 
 # llm = ChatOpenAI(
 #     openai_api_key="lm-studio",
