@@ -250,6 +250,7 @@ if st.session_state.selected_index is not None:
     tab1, tab2 = st.tabs(["📝 Research Report", "🧠 Research Questions"])
 
     with tab1:
+        formatted_report = item["final_report"].replace("\n", "<br>")
         st.markdown(
             f"""
             <div style="
@@ -263,7 +264,7 @@ if st.session_state.selected_index is not None:
                 backdrop-filter: blur(10px);
                 border: 1px solid rgba(44, 90, 160, 0.1);
             ">
-                {item["final_report"].replace("\\n", "<br>")}
+                {formatted_report}
             </div>
             """,
             unsafe_allow_html=True
