@@ -1,13 +1,18 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from typing import List
+import os
 
+# llm = ChatOpenAI(
+#     openai_api_key="lm-studio",
+#     base_url="http://127.0.0.1:1234/v1",
+#     model="qwen2.5-7b-instruct"
+# )
 llm = ChatOpenAI(
-    openai_api_key="lm-studio",
-    base_url="http://127.0.0.1:1234/v1",
-    model="qwen2.5-7b-instruct"
+    api_key=os.getenv("OPENAI_API_KEY"),
+    model="gpt-3.5-turbo",
+    temperature=0
 )
-
 def planner_agent(topic: str, num_subquestions: int = 8) -> List[str]:
     """
     Planner Agent:
