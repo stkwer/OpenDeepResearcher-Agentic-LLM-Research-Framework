@@ -1,6 +1,7 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from typing import List
+from langchain_groq import ChatGroq
 import os
 
 # llm = ChatOpenAI(
@@ -8,9 +9,10 @@ import os
 #     base_url="http://127.0.0.1:1234/v1",
 #     model="qwen2.5-7b-instruct"
 # )
-llm = ChatOpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
-    model="gpt-3.5-turbo",
+
+llm = ChatGroq(
+    groq_api_key=os.getenv("GROQ_API_KEY"),
+    model="llama3-8b-8192",   # or mixtral-8x7b
     temperature=0
 )
 def planner_agent(topic: str, num_subquestions: int = 8) -> List[str]:

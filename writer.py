@@ -1,12 +1,18 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
+from langchain_groq import ChatGroq
+import os
 
-llm = ChatOpenAI(
-    openai_api_key="lm-studio",
-    base_url="http://127.0.0.1:1234/v1",
-    model="qwen2.5-7b-instruct"
+# llm = ChatOpenAI(
+#     openai_api_key="lm-studio",
+#     base_url="http://127.0.0.1:1234/v1",
+#     model="qwen2.5-7b-instruct"
+# )
+llm = ChatGroq(
+    groq_api_key=os.getenv("GROQ_API_KEY"),
+    model="llama3-8b-8192",
+    temperature=0
 )
-
 def writer_agent(topic: str, research_content: str) -> str:
     """
     Generates a clean, structured summary for the main topic.
