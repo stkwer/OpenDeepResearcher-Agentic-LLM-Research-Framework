@@ -40,46 +40,54 @@ The application is powered by a **local Large Language Model (LLM)** running thr
 
 # Architecture
 
-```text
-                    User Topic
-                        │
-                        ▼
-                React Frontend
-                        │
-                HTTP / SSE
-                        │
-                        ▼
-                FastAPI Backend
-                        │
-                        ▼
-             LangGraph Research Pipeline
+                     User
+                      │
+                      ▼
+              React Frontend
+                 (Vite + React)
+                      │
+              HTTP / SSE Requests
+                      │
+                      ▼
+              FastAPI Backend
+                 (server.py)
+                      │
+                      ▼
+        ┌───────────────────────────┐
+        │     LangGraph Workflow    │
+        │                           │
+        │   Planner                 │
+        │      │                    │
+        │      ▼                    │
+        │   Searcher                │
+        │      │                    │
+        │      ▼                    │
+        │    Writer                 │
+        │      │                    │
+        │      ▼                    │
+        │  Reflection ─────────┐    │
+        │      │               │    │
+        │      └── Continue? ──┘    │
+        │             │             │
+        │             ▼             │
+        │         Reporter          │
+        └───────────────────────────┘
+                      │
+          ┌───────────┼─────────────┐
+          │           │             │
+          ▼           ▼             ▼
+     PDF Export   PPT Export   Follow-up Q&A
+                      │
+                      ▼
+              Final Research Report
 
-        Planner
-            │
-            ▼
-        Searcher
-            │
-            ▼
-         Writer
-            │
-            ▼
-      Reflection
-     ┌────────────┐
-     │ Continue?  │
-     └──────┬─────┘
-            │
-     Yes ◄──┘
-            │
-            ▼
-        Reporter
-            │
-            ▼
-     Academic Research Paper
-            │
-            ▼
- PDF │ PPTX │ Follow-up Q&A
-```
 
+      External Services Used
+      ┌────────────────────────────┐
+      │ LM Studio (Local LLM)      │
+      │ DuckDuckGo Search (DDGS)   │
+      │ RAG Document Store         │
+      └────────────────────────────┘
 ---
 
 # Tech Stack
